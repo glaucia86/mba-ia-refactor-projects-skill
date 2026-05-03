@@ -1,6 +1,5 @@
 from database import db
 from datetime import datetime
-import json
 
 class Task(db.Model):
     __tablename__ = 'tasks'
@@ -35,6 +34,11 @@ class Task(db.Model):
         data['tags'] = self.tags.split(',') if self.tags else []
         return data
 
+    def to_dict_with_status(self):
+        data = self.to_dict()
+        data['overdue'] = self.is_overdue()
+        return data
+
     def validate_status(self, new_status):
         valid = ['pending', 'in_progress', 'done', 'cancelled']
         if new_status in valid:
@@ -48,13 +52,8 @@ class Task(db.Model):
         return False
 
     def is_overdue(self):
-        if self.due_date:
-            if self.due_date < datetime.utcnow():
-                if self.status != 'done' and self.status != 'cancelled':
-                    return True
-                else:
-                    return False
-            else:
-                return False
-        else:
-            return False
+        return bool(
+            self.due_date
+            and self.due_date < datetime.utcnow()
+            and self.status not in ['done', 'cancelled']
+        )

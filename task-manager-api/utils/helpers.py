@@ -1,10 +1,13 @@
 from datetime import datetime
 import re
-import os
-import json
-import sys
-import math
-import hashlib
+
+VALID_STATUSES = ['pending', 'in_progress', 'done', 'cancelled']
+VALID_ROLES = ['user', 'admin', 'manager']
+MAX_TITLE_LENGTH = 200
+MIN_TITLE_LENGTH = 3
+MIN_PASSWORD_LENGTH = 4
+DEFAULT_PRIORITY = 3
+DEFAULT_COLOR = '#000000'
 
 def format_date(date_obj):
     if date_obj:
@@ -43,10 +46,10 @@ def log_action(action, details=None):
 def parse_date(date_string):
     try:
         return datetime.strptime(date_string, '%Y-%m-%d')
-    except:
+    except ValueError:
         try:
             return datetime.strptime(date_string, '%d/%m/%Y')
-        except:
+        except ValueError:
             return None
 
 def is_valid_color(color):
@@ -72,8 +75,7 @@ def process_task_data(data, existing_task=None):
         result['description'] = data['description']
 
     if 'status' in data:
-        valid_statuses = ['pending', 'in_progress', 'done', 'cancelled']
-        if data['status'] in valid_statuses:
+        if data['status'] in VALID_STATUSES:
             result['status'] = data['status']
         else:
             return None, 'Status inválido'
@@ -85,7 +87,7 @@ def process_task_data(data, existing_task=None):
                 result['priority'] = p
             else:
                 return None, 'Prioridade deve ser entre 1 e 5'
-        except:
+        except (TypeError, ValueError):
             return None, 'Prioridade inválida'
 
     if 'due_date' in data:
@@ -106,11 +108,3 @@ def process_task_data(data, existing_task=None):
             result['tags'] = tags
 
     return result, None
-
-VALID_STATUSES = ['pending', 'in_progress', 'done', 'cancelled']
-VALID_ROLES = ['user', 'admin', 'manager']
-MAX_TITLE_LENGTH = 200
-MIN_TITLE_LENGTH = 3
-MIN_PASSWORD_LENGTH = 4
-DEFAULT_PRIORITY = 3
-DEFAULT_COLOR = '#000000'
