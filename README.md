@@ -306,7 +306,7 @@ python C:\Users\glauc\OneDrive\Documents\Labs\repocheckai\.codex\skills\.system\
   <br/><br/>
   <strong>Glaucia Lemos</strong>
   <br/>
-  <sub>AI Transformation Leader - Engineering Specialist II @ Itaú | Codex Ambassador | Microsoft MVP - Web Technologies</sub>
+  <sub>AI Transformation Lead, Engineering Specialist II @ Itaú | Codex Ambassador | Microsoft MVP - Web Technologies</sub>
   <br/><br/>
   <a href="https://github.com/glaucia86">
     <img src="https://img.shields.io/badge/GitHub-%40glaucia86-181717?logo=github&logoColor=white" alt="GitHub"/>
