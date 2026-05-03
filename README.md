@@ -14,7 +14,7 @@ Repositório com a entrega da skill `refactor-arch` usando o OpenAI Codex, criad
 
 </div>
 
-> [!INFO]
+> [!NOTE]
 > Este repositório é parte da entrega da tarefa do **[MBA de Engenharia de Software com IA da Full Cycle](https://ia.fullcycle.com.br/mba-ia/)**
 
 ## Navegação Rápida
