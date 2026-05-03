@@ -110,7 +110,7 @@ Validation:    README commands plus runtime checks with Flask.test_client()
 
 - File: `code-smells-project/database.py:75-83`, `code-smells-project/models.py:72-103`, `code-smells-project/models.py:122-129`
 - Description: Seed users and newly created users stored plaintext passwords, and user list/detail responses returned the `senha` field.
-- Evidence: seed values included `admin123`, `123456` and `senha123`; serializers exposed `"senha": row["senha"]`.
+- Evidence: seed values included compromised default passwords; serializers exposed `"senha": row["senha"]`.
 - Impact: Any user-listing response leaked credentials and database compromise exposed reusable passwords.
 - Recommendation: Store passwords with a one-way password hashing function and never include password material in API responses.
 - Phase 3 result: new passwords use Werkzeug hashing, legacy plaintext passwords are upgraded after a successful login, and user serializers omit `senha`.

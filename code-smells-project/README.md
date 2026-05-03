@@ -36,9 +36,14 @@ SECRET_KEY=<valor-seguro>
 FLASK_DEBUG=false
 HOST=0.0.0.0
 PORT=5000
+SEED_ADMIN_PASSWORD=<senha-admin-local>
+SEED_JOAO_PASSWORD=<senha-cliente-local>
+SEED_MARIA_PASSWORD=<senha-cliente-local>
 ```
 
 Se `SECRET_KEY` não for informada, a aplicação gera um valor aleatório em memória no boot. Para produção, informe um segredo estável por variável de ambiente.
+
+As senhas antigas dos usuários seedados foram revogadas. Para conseguir fazer login com os usuários de exemplo em ambiente local, defina as variáveis `SEED_ADMIN_PASSWORD`, `SEED_JOAO_PASSWORD` e `SEED_MARIA_PASSWORD` antes de iniciar a aplicação. Se essas variáveis não forem informadas, a aplicação gera senhas aleatórias não recuperáveis para evitar credenciais padrão no repositório.
 
 ## Rotas principais
 

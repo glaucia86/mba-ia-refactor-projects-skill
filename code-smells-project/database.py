@@ -1,9 +1,17 @@
+import os
+import secrets
 import sqlite3
 
 from flask import current_app, g
 from werkzeug.security import generate_password_hash
 
 from config.settings import DATABASE_PATH
+
+SEED_USER_PASSWORD_ENVS = {
+    "admin@loja.com": "SEED_ADMIN_PASSWORD",
+    "joao@email.com": "SEED_JOAO_PASSWORD",
+    "maria@email.com": "SEED_MARIA_PASSWORD",
+}
 
 
 def get_db():
@@ -66,6 +74,7 @@ def init_db():
     """)
     db.commit()
     seed_database(db)
+    rotate_seed_user_passwords(db)
 
 
 def seed_database(db):
@@ -92,15 +101,32 @@ def seed_database(db):
     )
 
     usuarios = [
-        ("Admin", "admin@loja.com", generate_password_hash("admin123"), "admin"),
-        ("João Silva", "joao@email.com", generate_password_hash("123456"), "cliente"),
-        ("Maria Santos", "maria@email.com", generate_password_hash("senha123"), "cliente"),
+        ("Admin", "admin@loja.com", _seed_password_hash("SEED_ADMIN_PASSWORD"), "admin"),
+        ("João Silva", "joao@email.com", _seed_password_hash("SEED_JOAO_PASSWORD"), "cliente"),
+        ("Maria Santos", "maria@email.com", _seed_password_hash("SEED_MARIA_PASSWORD"), "cliente"),
     ]
     cursor.executemany(
         "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)",
         usuarios,
     )
     db.commit()
+
+
+def rotate_seed_user_passwords(db):
+    cursor = db.cursor()
+    for email, env_name in SEED_USER_PASSWORD_ENVS.items():
+        cursor.execute(
+            "UPDATE usuarios SET senha = ? WHERE email = ?",
+            (_seed_password_hash(env_name), email),
+        )
+    db.commit()
+
+
+def _seed_password_hash(env_name):
+    password = os.environ.get(env_name)
+    if not password:
+        password = secrets.token_urlsafe(24)
+    return generate_password_hash(password)
 
 
 def init_app(app):
